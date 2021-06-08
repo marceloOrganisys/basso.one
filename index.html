@@ -1,20 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
-	<title>memymine</title>
-</head>
-<body>
-	<div id="background">
-		<h1>Building...</h1>
-	</div>
-</body>
-</html>
+<script src="https://unpkg.com/vue"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="icon" href="icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kill 'em all</title>
 
-<script>
-</script>
+<div id="game">
+	<div id="life" class="flex">
+		<div id="player" class="center">
+			<p>Player</p>
+			<div id="player-life" class="progress-bar">
+				<span :style="{width: pLife + '%', 'background-color': pLife >= 20 ? 'green' : 'red'}"></span>
+			</div>
+			<p class="percentage">{{ pLife }}%</p>
+		</div>
+		<div id="monster" class="center">
+			<p>Monster</p>
+			<div id="monster-life" class="progress-bar">
+				<span :style="{width: mLife + '%', 'background-color': mLife >= 20 ? 'green' : 'red'}"></span>
+			</div>
+			<p class="percentage">{{ mLife }}%</p>
+		</div>
+	</div>
+	<div id="buttons">
+		<template v-if="winner == ''">
+			<button v-if="!playing" @click="playing = true" class="control start-button">Start game</button>
+			<template v-else>
+				<button class="control attack" @click="attack" :disabled="winner != ''">attack</button>
+				<button class="control special-attack" @click="specialAttack" :disabled="winner != ''">special attack</button>
+				<button class="control heal" @click="heal" :disabled="winner != ''">heal</button>
+				<button class="control run" @click="run">run</button>
+			</template>
+		</template>
+		<template v-else>
+			<h1 :class="winner">you {{ winner == 'm' ? 'LOST' : 'WIN' }}</h1>
+		</template>
+	</div>
+	<div id="actions" v-show="playing">
+		<ul>
+			<li v-for="action in actions.slice(-2)" :class="action.origin">{{ message(action) }}</li>
+		</ul>
+	</div>
+</div>
+
+<script src="app.js"></script>
